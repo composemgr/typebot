@@ -45,7 +45,7 @@ See `docker-compose.yaml` for complete list of configurable options.
 
 ## 📂 Volumes
 
-- `./rootfs/data/typebot` - Data storage
+- `./volumes/data/typebot` - Data storage
 
 ## 🔍 Logging
 
