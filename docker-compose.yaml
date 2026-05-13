@@ -21,6 +21,7 @@ services:
       HOSTNAME: ${BASE_HOST_NAME:-$HOSTNAME}
       NEXTAUTH_URL: http://${BASE_HOST_NAME:-$HOSTNAME}:3000
       NEXT_PUBLIC_VIEWER_URL: http://${BASE_HOST_NAME:-$HOSTNAME}:3001
+      NEXTAUTH_SECRET: ${APP_SECRET_TOKEN_32:-changeme_nextauth_secret_32_chars}
       ENCRYPTION_SECRET: ${APP_SECRET_KEY:-changeme_secret_key_min_32_chars}
       DATABASE_URL: postgresql://${DB_USER_NAME:-typebot}:${DB_USER_PASS:-changeme_db_password}@typebot-db:5432/${DB_CREATE_DATABASE_NAME:-typebot}
       ADMIN_EMAIL: ${APP_ADMIN_USER:-admin}@${BASE_DOMAIN_NAME:-example.com}
