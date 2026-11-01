@@ -1,14 +1,21 @@
 ## 👋 Welcome to typebot 🚀
 
-Open-source chatbot builder
+Typebot - open source conversational form and chat builder
 
 ## 📋 Description
 
-Open-source chatbot builder
+Typebot - open source conversational form and chat builder
 
 ## 🚀 Services
 
-- **app**: baptistearno/typebot-builder:latest
+- **app**: Typebot - open source conversational form and chat builder
+- **typebot-db**: Postgres database
+
+
+### Infrastructure Components
+
+- **Postgres**
+
 
 ## 📦 Installation
 
@@ -21,7 +28,8 @@ curl -q -LSsf "https://raw.githubusercontent.com/composemgr/typebot/main/docker-
 ```bash
 git clone "https://github.com/composemgr/typebot" ~/.local/srv/docker/typebot
 cd ~/.local/srv/docker/typebot
-docker compose up -d
+cp default.env .env
+docker compose --env-file .env up -d
 ```
 
 ### Option 3: Using composemgr
@@ -35,41 +43,87 @@ composemgr install typebot
 
 ```shell
 TZ=America/New_York
+BASE_HOST_NAME=typebot.example.com
+DB_USER_NAME=typebot
+DB_USER_PASS=replace-with-a-random-password
+APP_SECRET_KEY=replace-with-a-random-16-byte-hex-string
+APP_SECRET_TOKEN_32=replace-with-a-random-32-byte-hex-string
+EMAIL_SERVER_HOST=172.17.0.1
+EMAIL_SERVER_PORT=587
 ```
 
 See `docker-compose.yaml` for complete list of configurable options.
 
+### Environment Files
+
+`default.env.sample` holds the full set of variables and is copied to `.env`
+before starting the stack:
+
+```bash
+cp default.env .env
+docker compose --env-file .env up -d
+```
+
+`app.env.sample` holds the app-specific overrides and is copied to `app.env`:
+
+```bash
+cp app.env.sample app.env
+```
+
+`composemgr up` applies `app.env` and `default.env` automatically. Raw
+`docker compose` commands need `--env-file .env` to pick up the same values.
+
+### Reverse Proxy
+
+Three standalone compose files ship in this repo:
+
+| File | Use |
+|------|-----|
+| `docker-compose.yaml` | Default, published on `172.17.0.1:64376` |
+| `docker-compose.traefik.yaml` | Behind an existing external `traefik` network |
+| `docker-compose.tunnel.yaml` | Behind an existing external `cloudflare` tunnel network |
+
+```bash
+docker compose -f docker-compose.traefik.yaml --env-file .env up -d
+```
+
 ## 🌐 Access
 
-- **Web Interface**: http://172.17.0.1:3000
+- **Web Interface**: http://172.17.0.1:64376
 
 ## 📂 Volumes
 
-- `./volumes/data/typebot` - Data storage
+- `./volumes/data/typebot` - Uploaded files and assets
+- `./volumes/db/postgres/typebot` - Database data
+
+## 🔐 Security
+
+- Set strong `APP_SECRET_KEY` and `APP_SECRET_TOKEN_32` values
+- Back up the Postgres volume regularly
 
 ## 🔍 Logging
 
 ```shell
-docker compose logs -f app
+docker compose --env-file .env logs -f app
 ```
 
 ## 🛠️ Management
 
 ```bash
 # Start services
-docker compose up -d
+docker compose --env-file .env up -d
 
 # Stop services
-docker compose down
+docker compose --env-file .env down
 
 # Update to latest images
-docker compose pull && docker compose up -d
+docker compose --env-file .env pull && docker compose --env-file .env up -d
 
 # View logs
-docker compose logs -f
+docker compose --env-file .env logs -f
 
 # Restart services
-docker compose restart
+docker compose --env-file .env restart
 ```
 
 ## 📋 Requirements
@@ -79,5 +133,5 @@ docker compose restart
 
 ## 🤝 Author
 
-🤖 casjay: [Github](https://github.com/casjay) 🤖  
+🤖 casjay: [Github](https://github.com/casjay) 🤖
 🦄 composemgr: [Github](https://github.com/composemgr) 🦄
