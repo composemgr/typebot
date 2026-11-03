@@ -30,6 +30,12 @@ services:
       SMTP_USERNAME: ${EMAIL_SERVER_LOGIN_NAME:-}
       SMTP_PASSWORD: ${EMAIL_SERVER_LOGIN_PASS:-}
       NEXT_PUBLIC_SMTP_FROM: ${EMAIL_SERVER_MAIL_FROM:-no-reply@example.com}
+    healthcheck:
+      test: ['CMD', 'bash', '-c', 'exec 3<>/dev/tcp/127.0.0.1/3000']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     ports:
       - '172.17.0.1:64376:3000'
     volumes:
